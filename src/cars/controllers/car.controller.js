@@ -1,8 +1,8 @@
-const { CarDto } = require("../dtos/car.dto");
-const { StatusCode } = require("../../utils/status.code");
-const { invalidBody } = require("../utils/car.body.validator");
-const { invalidBodyError } = require("../../utils/error.handler");
-const { isJson } = require("../utils/json.validator");
+const { CarDto } = require("./../dtos/car.dto");
+const { StatusCode } = require("./../../utils/status.code");
+const { invalidBody } = require("./../utils/car.body.validator");
+const { invalidBodyError } = require("./../../utils/error.handler");
+const { isJson } = require("./../utils/json.validator");
 
 class CarController {
     constructor(carService) {

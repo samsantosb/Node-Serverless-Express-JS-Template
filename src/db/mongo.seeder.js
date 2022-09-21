@@ -1,4 +1,4 @@
-const { CarModel } = require("../cars/models/car.model");
+const { CarModel } = require("./../cars/models/car.model");
 const { mongoConnect, mongoDisconnect } = require('./mongo.connection');
 
 async function seed() {
