@@ -1,0 +1,97 @@
+const { CarDto } = require("../dtos/car.dto");
+const { StatusCode } = require("../../utils/status.code");
+const { invalidBody } = require("../utils/car.body.validator");
+const { invalidBodyError } = require("../../utils/error.handler");
+
+class CarController {
+    constructor(carService) {
+        this.carService = carService;
+    }
+
+    async getAll(req, res) {
+        const reponse = await this.carService.getAll();
+
+        if ("promiseError" in reponse) {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(reponse);
+            return;
+        }
+        res.status(StatusCode.OK).json(reponse);
+    }
+
+    async getById(req, res) {
+        const reponse = await this.carService.getById(req.params.id);
+
+        if ("promiseError" in reponse) {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(reponse);
+            return;
+        }
+
+        if ("invalidIdError" in reponse) {
+            res.status(StatusCode.BAD_REQUEST).json(reponse);
+            return;
+        }
+
+        res.status(StatusCode.OK).json(reponse);
+    }
+
+    async create(req, res) {
+        const body = JSON.parse(req.apiGateway.event.body);
+        if (invalidBody(body)) {
+            res.status(StatusCode.BAD_REQUEST).json(invalidBodyError(req.body));
+            return;
+        }
+
+        const carDto = new CarDto(body);
+
+        const reponse = await this.carService.create(carDto);
+        if ("promiseError" in reponse) {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(reponse);
+            return;
+        }
+
+        res.status(StatusCode.CREATED).json(reponse);
+    }
+
+    async update(req, res) {
+        const body = JSON.parse(req.apiGateway.event.body);
+        if (invalidBody(body)) {
+            res.status(StatusCode.BAD_REQUEST).json(invalidBodyError(req.body));
+            return;
+        }
+
+        const id = req.params.id;
+        const carDto = new CarDto(body);
+
+        const reponse = await this.carService.update(id, carDto);
+
+        if ("promiseError" in reponse) {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(reponse);
+            return;
+        }
+
+        if ("invalidIdError" in reponse) {
+            res.status(StatusCode.BAD_REQUEST).json(reponse);
+            return;
+        }
+
+        res.status(StatusCode.OK).json(reponse);
+    }
+
+    async delete(req, res) {
+        const reponse = await this.carService.delete(req.params.id);
+
+        if ("promiseError" in reponse) {
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(reponse);
+            return;
+        }
+
+        if ("invalidIdError" in reponse) {
+            res.status(StatusCode.BAD_REQUEST).json(reponse);
+            return;
+        }
+
+        res.status(StatusCode.OK).json(reponse);
+    }
+}
+
+module.exports = { CarController };
