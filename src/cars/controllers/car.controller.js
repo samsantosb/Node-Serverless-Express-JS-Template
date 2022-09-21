@@ -2,6 +2,7 @@ const { CarDto } = require("../dtos/car.dto");
 const { StatusCode } = require("../../utils/status.code");
 const { invalidBody } = require("../utils/car.body.validator");
 const { invalidBodyError } = require("../../utils/error.handler");
+const { isJson } = require("../utils/json.validator");
 
 class CarController {
     constructor(carService) {
@@ -35,7 +36,11 @@ class CarController {
     }
 
     async create(req, res) {
-        const body = JSON.parse(req.apiGateway.event.body);
+        const rawBody = req.apiGateway.event.body
+        const isBodyJson = isJson(rawBody)
+
+        const body = isBodyJson ? JSON.parse(rawBody) : rawBody;
+
         if (invalidBody(body)) {
             res.status(StatusCode.BAD_REQUEST).json(invalidBodyError(req.body));
             return;
@@ -53,7 +58,11 @@ class CarController {
     }
 
     async update(req, res) {
-        const body = JSON.parse(req.apiGateway.event.body);
+        const rawBody = req.apiGateway.event.body
+        const isBodyJson = isJson(rawBody)
+
+        const body = isBodyJson ? JSON.parse(rawBody) : rawBody;
+
         if (invalidBody(body)) {
             res.status(StatusCode.BAD_REQUEST).json(invalidBodyError(req.body));
             return;

@@ -46,19 +46,19 @@ describe("car Controller", () => {
 
     describe("create", () => {
         it("should create car", async () => {
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.create(req, res);
             expect(res.status).toHaveBeenCalledWith(StatusCode.CREATED);
             expect(res.json).toHaveBeenCalledWith(fakeCars[0]);
         });
         it("should return status code 201", async () => {
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.create(req, res);
             expect(res.status).toHaveBeenCalledWith(StatusCode.CREATED);
         });
         it("should call carService create", async () => {
             const spy = jest.spyOn(fakeCarService, "create");
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.create(req, res);
             expect(spy).toHaveBeenCalled();
         });
@@ -66,19 +66,19 @@ describe("car Controller", () => {
 
     describe("update", () => {
         it("should update car", async () => {
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.update(req, res);
             expect(res.status).toHaveBeenCalledWith(StatusCode.OK);
             expect(res.json).toHaveBeenCalledWith(fakeCars[0]);
         });
         it("should return status code 200", async () => {
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.update(req, res);
             expect(res.status).toHaveBeenCalledWith(StatusCode.OK);
         });
         it("should call carService update", async () => {
             const spy = jest.spyOn(fakeCarService, "update");
-            req.body = fakeCars[0];
+            req.apiGateway.event.body = fakeCars[0];
             await carController.update(req, res);
             expect(spy).toHaveBeenCalled();
         });

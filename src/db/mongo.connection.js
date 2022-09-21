@@ -1,3 +1,5 @@
+global.TextEncoder = require("util").TextEncoder;
+global.TextDecoder = require("util").TextDecoder;
 const { connection, connections, connect } = require("mongoose");
 require('dotenv').config();
 
